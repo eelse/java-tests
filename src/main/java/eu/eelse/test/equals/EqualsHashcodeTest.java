@@ -8,7 +8,8 @@ import java.util.stream.IntStream;
 public class EqualsHashcodeTest {
 
   public static void main(String[] args) {
-    long iterations = 100;
+    long iterationsPerRun = 10000;
+    int runsForAverage = 10;
 
     int objectCount = 10;
 
@@ -19,18 +20,50 @@ public class EqualsHashcodeTest {
             + objectCount
             + " objects using reflective or explicit methods, then:"
             + "\n   - forcing calls to map.containsKey(object not in map) so every hashcode gets called"
-            + "\n   - loop the map and execute equals on every value"
-            + "\n\nReflective: org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals(this, o)"
-            + "\n\nExplicit: custom checks on identicality and usage of java.util.Objects.equals(var, other.var)";
+            + "\n   - loop the map and execute equals on every value";
 
-    Runnable reflective =
+    Runnable reflectiveApache =
         () -> {
-          ObjectReflection root = new ObjectReflection("root", -5, null, -5F, -5, true);
-          Map<ObjectReflection, ObjectReflection> objectReflections =
+          ObjectApacheLangReflection root =
+              new ObjectApacheLangReflection("root", -5, null, -5F, -5, true);
+          Map<ObjectApacheLangReflection, ObjectApacheLangReflection> objectReflections =
               IntStream.range(0, objectCount)
                   .mapToObj(
                       i ->
-                          new ObjectReflection(
+                          new ObjectApacheLangReflection(
+                              "test" + i, i, root, Float.intBitsToFloat(i), i, false))
+                  .collect(Collectors.toMap(o -> o, o -> o));
+          // look for an object that is not there so it will pass all keys' hashcode methods
+          objectReflections.containsKey(root);
+          // perform equals on all keys
+          objectReflections.forEach((key, val) -> key.equals(root));
+        };
+
+    Runnable reflectiveApache3 =
+        () -> {
+          ObjectApacheLang3Reflection root =
+              new ObjectApacheLang3Reflection("root", -5, null, -5F, -5, true);
+          Map<ObjectApacheLang3Reflection, ObjectApacheLang3Reflection> objectReflections =
+              IntStream.range(0, objectCount)
+                  .mapToObj(
+                      i ->
+                          new ObjectApacheLang3Reflection(
+                              "test" + i, i, root, Float.intBitsToFloat(i), i, false))
+                  .collect(Collectors.toMap(o -> o, o -> o));
+          // look for an object that is not there so it will pass all keys' hashcode methods
+          objectReflections.containsKey(root);
+          // perform equals on all keys
+          objectReflections.forEach((key, val) -> key.equals(root));
+        };
+
+    Runnable reflectiveCustom =
+        () -> {
+          ObjectCustomReflection root = new ObjectCustomReflection("root", -5, null, -5F, -5, true);
+          Map<ObjectCustomReflection, ObjectCustomReflection> objectReflections =
+              IntStream.range(0, objectCount)
+                  .mapToObj(
+                      i ->
+                          new ObjectCustomReflection(
                               "test" + i, i, root, Float.intBitsToFloat(i), i, false))
                   .collect(Collectors.toMap(o -> o, o -> o));
           // look for an object that is not there so it will pass all keys' hashcode methods
@@ -53,9 +86,11 @@ public class EqualsHashcodeTest {
           objectReflections.forEach((key, val) -> key.equals(root));
         };
 
-    new Tester(description, iterations)
-        .withTest("reflective methods", reflective)
-        .withTest("explicit methods", explicit)
+    new Tester(description, iterationsPerRun, runsForAverage)
+        .addTest("reflective methods Apache commons lang 2", reflectiveApache)
+        .addTest("reflective methods Apache commons lang 3", reflectiveApache3)
+        .addTest("reflective methods custom", reflectiveCustom)
+        .addTest("explicit methods", explicit)
         .runTests();
   }
 }

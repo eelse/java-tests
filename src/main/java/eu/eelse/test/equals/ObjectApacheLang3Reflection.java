@@ -1,18 +1,18 @@
 package eu.eelse.test.equals;
 
-public class ObjectReflection {
+public class ObjectApacheLang3Reflection {
 
   private final String aString;
   private final Integer anInteger;
-  private final ObjectReflection another;
+  private final ObjectApacheLang3Reflection another;
   private final Float aFloat;
   private final int aPrimaryInt;
   private final Boolean aBoolean;
 
-  public ObjectReflection(
+  public ObjectApacheLang3Reflection(
       String aString,
       Integer anInteger,
-      ObjectReflection another,
+      ObjectApacheLang3Reflection another,
       Float aFloat,
       int aPrimaryInt,
       Boolean aBoolean) {

@@ -6,8 +6,6 @@ public class BoxingTest {
   public static void main(String[] args) {
     long iterations = 10_000;
 
-    long calculations = 10_000;
-
     Runnable automatic =
         () -> {
           {
@@ -69,8 +67,8 @@ public class BoxingTest {
     new Tester(
             "Test autoboxing (eg. Long l = 1L;) versus explicit value assignment (eg. Long l = Long.valueOf(1L);)",
             iterations)
-        .withTest("autoboxing", automatic)
-        .withTest("explicit boxing", explicit)
+        .addTest("autoboxing", automatic)
+        .addTest("explicit boxing", explicit)
         .runTests();
   }
 }
