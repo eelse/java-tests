@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 public class EqualsHashcodeTest {
 
   public static void main(String[] args) {
-    long iterationsPerRun = 10000;
+    long iterationsPerRun = 10_000;
     int runsForAverage = 10;
 
     int objectCount = 10;
@@ -26,7 +26,7 @@ public class EqualsHashcodeTest {
         () -> {
           ObjectApacheLangReflection root =
               new ObjectApacheLangReflection("root", -5, null, -5F, -5, true);
-          Map<ObjectApacheLangReflection, ObjectApacheLangReflection> objectReflections =
+          Map<TestObject, TestObject> objectReflections =
               IntStream.range(0, objectCount)
                   .mapToObj(
                       i ->
@@ -43,7 +43,7 @@ public class EqualsHashcodeTest {
         () -> {
           ObjectApacheLang3Reflection root =
               new ObjectApacheLang3Reflection("root", -5, null, -5F, -5, true);
-          Map<ObjectApacheLang3Reflection, ObjectApacheLang3Reflection> objectReflections =
+          Map<TestObject, TestObject> objectReflections =
               IntStream.range(0, objectCount)
                   .mapToObj(
                       i ->
@@ -59,7 +59,7 @@ public class EqualsHashcodeTest {
     Runnable reflectiveCustom =
         () -> {
           ObjectCustomReflection root = new ObjectCustomReflection("root", -5, null, -5F, -5, true);
-          Map<ObjectCustomReflection, ObjectCustomReflection> objectReflections =
+          Map<TestObject, TestObject> objectReflections =
               IntStream.range(0, objectCount)
                   .mapToObj(
                       i ->
@@ -75,7 +75,7 @@ public class EqualsHashcodeTest {
     Runnable explicit =
         () -> {
           ObjectJava root = new ObjectJava("root", -5, null, -5F, -5, true);
-          Map<ObjectJava, ObjectJava> objectReflections =
+          Map<TestObject, TestObject> objectReflections =
               IntStream.range(0, objectCount)
                   .mapToObj(
                       i -> new ObjectJava("test" + i, i, root, Float.intBitsToFloat(i), i, false))

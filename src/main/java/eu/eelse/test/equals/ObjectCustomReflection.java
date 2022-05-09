@@ -2,14 +2,7 @@ package eu.eelse.test.equals;
 
 import java.lang.reflect.Field;
 
-public class ObjectCustomReflection {
-
-  private final String aString;
-  private final Integer anInteger;
-  private final ObjectCustomReflection another;
-  private final Float aFloat;
-  private final int aPrimaryInt;
-  private final Boolean aBoolean;
+public class ObjectCustomReflection extends AbstractTestObject<ObjectCustomReflection> {
 
   public ObjectCustomReflection(
       String aString,
@@ -18,12 +11,7 @@ public class ObjectCustomReflection {
       Float aFloat,
       int aPrimaryInt,
       Boolean aBoolean) {
-    this.aString = aString;
-    this.anInteger = anInteger;
-    this.another = another;
-    this.aFloat = aFloat;
-    this.aPrimaryInt = aPrimaryInt;
-    this.aBoolean = aBoolean;
+    super(aString, anInteger, another, aFloat, aPrimaryInt, aBoolean);
   }
 
   @Override
@@ -34,7 +22,7 @@ public class ObjectCustomReflection {
       return true;
     }
     try {
-      for (Field declaredField : getClass().getDeclaredFields()) {
+      for (Field declaredField : getClass().getSuperclass().getDeclaredFields()) {
         declaredField.setAccessible(true);
         Object a = declaredField.get(this);
         Object b = declaredField.get(o);

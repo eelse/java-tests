@@ -4,7 +4,7 @@ import eu.eelse.test.Tester;
 
 public class BoxingTest {
   public static void main(String[] args) {
-    long iterations = 10_000;
+    long iterations = 10_000_000;
 
     Runnable automatic =
         () -> {
